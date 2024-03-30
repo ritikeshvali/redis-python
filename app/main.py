@@ -49,7 +49,7 @@ def handle_connection(conn, addr, store):
             else:
                 milisecs = int(response.split("|")[1].split("->")[2])
                 time = datetime.strptime(response.split("|")[1].split("->")[1], output_format)
-                if time>now:
+                if time<now:
                     response = "$-1\r\n"
                 else:
                     response = resp_response(response.split("|")[0])
