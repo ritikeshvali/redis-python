@@ -4,7 +4,7 @@ import re
 def handle_connection(conn, addr):
     data = conn.recv(1024).decode('utf-8')
     print(data)
-    pattern = re.compile(r'.*ping.*')
+    pattern = r'(.*)ping(.*)'
     matches = re.match(pattern, data)
     if matches:
         response = f"+PONG\r\n"
