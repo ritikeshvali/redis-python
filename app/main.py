@@ -1,6 +1,6 @@
 import socket
 import threading
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def resp_parser(param):
     lines = param.split("\r\n")
@@ -30,7 +30,9 @@ def handle_connection(conn, addr, store):
             conn.send(response.encode())
         elif vars[0] == "set":
             if len(vars) == 5:
-                date_string = datetime.now().strftime(output_format)
+                delta = timedelta(milliseconds=int(vars[4]))
+                future_datetime = datetime.now() + delta
+                date_string = future_datetime.strftime(output_format)
                 store[vars[1]] = vars[2] + f"|time->{date_string}->" + vars[4]
             else:
             # no expiry time
@@ -47,7 +49,7 @@ def handle_connection(conn, addr, store):
             else:
                 milisecs = int(response.split("|")[1].split("->")[2])
                 time = datetime.strptime(response.split("|")[1].split("->")[1], output_format)
-                if int((now - time).total_seconds()*1000) > milisecs:
+                if time>now:
                     response = "$-1\r\n"
                 else:
                     response = resp_response(response.split("|")[0])
