@@ -47,7 +47,6 @@ def handle_connection(conn, addr, store):
             # no expiry time
                 response = resp_response(response.split("|")[0])
             else:
-                milisecs = int(response.split("|")[1].split("->")[2])
                 time = datetime.strptime(response.split("|")[1].split("->")[1], output_format)
                 if time<now:
                     print(f"barrier: {0}, now: {1}", time, now)
