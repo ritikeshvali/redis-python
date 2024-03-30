@@ -16,6 +16,7 @@ def handle_connection(conn, addr, store):
         request: bytes = conn.recv(1024)
         if not request:
             break
+        now = datetime.now()
         data: str = request.decode()
         print(data)
         vars = resp_parser(data)
@@ -31,7 +32,7 @@ def handle_connection(conn, addr, store):
         elif vars[0] == "set":
             if len(vars) == 5:
                 delta = timedelta(milliseconds=int(vars[4]))
-                future_datetime = datetime.now() + delta
+                future_datetime = now + delta
                 date_string = future_datetime.strftime(output_format)[:-3]
                 store[vars[1]] = vars[2] + f"|time->{date_string}->" + vars[4]
             else:
@@ -42,7 +43,6 @@ def handle_connection(conn, addr, store):
             conn.send(response.encode())
         elif vars[0] == "get":
             response = store[vars[1]]
-            now = datetime.now()
             if "|-1" in response:
             # no expiry time
                 response = resp_response(response.split("|")[0])
