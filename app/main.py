@@ -22,7 +22,7 @@ def handle_connection(conn, addr):
                 response += elements[str_idx]
                 str_idx+=2
                 index-=1
-            print(response)
+            response = f"${len(response)}\r\n{response}\r\n"
             conn.send(response.encode())
     conn.close()
 
