@@ -7,9 +7,9 @@ def handle_connection(conn, addr):
     pattern = r'(.*)ping(.*)'
     matches = re.match(pattern, data)
     if matches:
-        response = f"+PONG\r\n"
+        response = "+PONG\r\n"
         print(response)
-        conn.send(response)
+        conn.send(response.encode())
     conn.close()
 
 def main():
