@@ -8,6 +8,7 @@ def handle_connection(conn, addr):
         if not request:
             break
         data: str = request.decode()
+        print(data)
         if "ping" in data.lower():
             response = "+PONG\r\n"
             print(response)
