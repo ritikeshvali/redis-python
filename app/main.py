@@ -1,10 +1,9 @@
 import socket
-import re
 import threading
+import datetime
 
 def resp_parser(param):
     lines = param.split("\r\n")
-    cnt = int(lines[0][1])
     vars = [lines[i] for i in range(2, len(lines), 2)]
     return vars
 
@@ -12,6 +11,7 @@ def resp_response(outp):
     return f"${len(outp)}\r\n{outp}\r\n"
 
 def handle_connection(conn, addr, store):
+    output_format = "%Y-%m-%d %H:%M:%S"
     while True:
         request: bytes = conn.recv(1024)
         if not request:
@@ -29,12 +29,25 @@ def handle_connection(conn, addr, store):
             response = resp_response(response)
             conn.send(response.encode())
         elif vars[0] == "set":
-            store[vars[1]] = vars[2]
+            if len(vars) == 5:
+                date_string = datetime.now().strftime(output_format)
+                store[vars[1]] = vars[2] + f"*px*time->{date_string}->" + vars[4]
+            else:
+            # no expiry time
+                store[vars[1]] = vars[2] + "*px*-1"
             response = f"+OK\r\n"
             conn.send(response.encode())
         elif vars[0] == "get":
             response = store[vars[1]]
-            response = resp_response(response)
+            if "*px*-1" in response:
+            # no expiry time
+                response = resp_response(response.split("*px*")[0])
+            else:
+                response = response.split("*px*")[0]
+                milisecs = int(response.split("*px*")[1].split("->")[2])
+                time = datetime.strptime(response.split("*px*")[1].split("->")[1], output_format)
+                if (datetime.now() - time)*1000 > milisecs:
+                    response = "$-1\r\n"
             conn.send(response.encode())
     conn.close()
 
