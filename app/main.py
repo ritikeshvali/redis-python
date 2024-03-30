@@ -3,10 +3,8 @@ import re
 
 def handle_connection(conn, addr):
     request: bytes = conn.recv(1024)
-    data: str = request.decode('utf-8')
-    pattern = r'(.*)ping(.*)'
-    matches = re.match(pattern, data)
-    if matches:
+    data: str = request.decode()
+    if "ping" in data.lower():
         response = "+PONG\r\n"
         print(response)
         conn.send(response.encode())
