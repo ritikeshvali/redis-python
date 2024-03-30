@@ -2,8 +2,8 @@ import socket
 import re
 
 def handle_connection(conn, addr):
-    data = conn.recv(1024).decode('utf-8')
-    print(data)
+    request: bytes = conn.recv(1024)
+    data: str = request.decode('utf-8')
     pattern = r'(.*)ping(.*)'
     matches = re.match(pattern, data)
     if matches:
