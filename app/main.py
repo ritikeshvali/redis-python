@@ -35,6 +35,7 @@ def handle_connection(conn, addr, store):
             else:
             # no expiry time
                 store[vars[1]] = vars[2] + "*px*-1"
+            print(store[vars[1]])
             response = f"+OK\r\n"
             conn.send(response.encode())
         elif vars[0] == "get":
