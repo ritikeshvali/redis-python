@@ -1,5 +1,6 @@
 import socket
 import re
+import threading
 
 def handle_connection(conn, addr):
     while True:
@@ -20,7 +21,8 @@ def main():
     while True:
         client_socket, client_address = server_socket.accept()
         print(f"Received a connection from {client_address}")
-        handle_connection(client_socket, client_address)
+        threading.Thread(target=handle_connection, args=[client_socket, client_address]).start()
+        # handle_connection(client_socket, client_address)
 
 if __name__ == "__main__":
     main()
