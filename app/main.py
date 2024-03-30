@@ -44,11 +44,12 @@ def handle_connection(conn, addr, store):
             # no expiry time
                 response = resp_response(response.split("*px*")[0])
             else:
-                response = response.split("*px*")[0]
                 milisecs = int(response.split("*px*")[1].split("->")[2])
                 time = datetime.strptime(response.split("*px*")[1].split("->")[1], output_format)
                 if (datetime.now() - time)*1000 > milisecs:
                     response = "$-1\r\n"
+                else:
+                    response = response.split("*px*")[0]
             conn.send(response.encode())
     conn.close()
 
