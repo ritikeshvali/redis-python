@@ -31,25 +31,25 @@ def handle_connection(conn, addr, store):
         elif vars[0] == "set":
             if len(vars) == 5:
                 date_string = datetime.now().strftime(output_format)
-                store[vars[1]] = vars[2] + f"*px*time->{date_string}->" + vars[4]
+                store[vars[1]] = vars[2] + f"|time->{date_string}->" + vars[4]
             else:
             # no expiry time
-                store[vars[1]] = vars[2] + "*px*-1"
+                store[vars[1]] = vars[2] + "|-1"
             print(store[vars[1]])
             response = f"+OK\r\n"
             conn.send(response.encode())
         elif vars[0] == "get":
             response = store[vars[1]]
-            if "*px*-1" in response:
+            if "|-1" in response:
             # no expiry time
-                response = resp_response(response.split("*px*")[0])
+                response = resp_response(response.split("|")[0])
             else:
-                milisecs = int(response.split("*px*")[1].split("->")[2])
-                time = datetime.strptime(response.split("*px*")[1].split("->")[1], output_format)
+                milisecs = int(response.split("|")[1].split("->")[2])
+                time = datetime.strptime(response.split("|")[1].split("->")[1], output_format)
                 if int((datetime.now() - time).total_seconds()*1000) > milisecs:
                     response = "$-1\r\n"
                 else:
-                    response = response.split("*px*")[0]
+                    response = resp_response(response.split("|")[0])
             conn.send(response.encode())
     conn.close()
 
