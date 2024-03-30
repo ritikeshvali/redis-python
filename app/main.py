@@ -12,6 +12,10 @@ def handle_connection(conn, addr):
             response = "+PONG\r\n"
             print(response)
             conn.send(response.encode())
+        elif "echo" in data.lower():
+            response = data.split(" ")[1]
+            print(response)
+            conn.send(response.encode())
     conn.close()
 
 def main():
