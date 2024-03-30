@@ -40,13 +40,14 @@ def handle_connection(conn, addr, store):
             conn.send(response.encode())
         elif vars[0] == "get":
             response = store[vars[1]]
+            now = datetime.now()
             if "|-1" in response:
             # no expiry time
                 response = resp_response(response.split("|")[0])
             else:
                 milisecs = int(response.split("|")[1].split("->")[2])
                 time = datetime.strptime(response.split("|")[1].split("->")[1], output_format)
-                if int((datetime.now() - time).total_seconds()*1000) > milisecs:
+                if int((now - time).total_seconds()*1000) > milisecs:
                     response = "$-1\r\n"
                 else:
                     response = resp_response(response.split("|")[0])
