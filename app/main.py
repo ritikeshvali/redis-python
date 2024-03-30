@@ -23,16 +23,19 @@ def handle_connection(conn, addr, store):
         if vars[0]=="ping":
             response = "+PONG\r\n"
             print(response)
+            conn.send(response.encode())
         elif vars[0] == "echo":
             response = "".join(vars[i] for i in range(1, len(vars)))
             response = resp_response(response)
+            conn.send(response.encode())
         elif vars[0] == "set":
             store[vars[1]] = vars[2]
             response = f"+OK\r\n"
+            conn.send(response.encode())
         elif vars[0] == "get":
             response = store[vars[1]]
             response = resp_response(response)
-    conn.sendall(response.encode())
+            conn.send(response.encode())
     conn.close()
 
 def main():
