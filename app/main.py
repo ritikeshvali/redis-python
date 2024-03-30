@@ -2,12 +2,14 @@ import socket
 import re
 
 def handle_connection(conn, addr):
-    request: bytes = conn.recv(1024)
-    data: str = request.decode()
-    if "ping" in data.lower():
-        response = "+PONG\r\n"
-        print(response)
-        conn.send(response.encode())
+    while True:
+        request: bytes = conn.recv(1024)
+        data: str = request.decode()
+        if "ping" in data.lower():
+            response = "+PONG\r\n"
+            print(response)
+            conn.send(response.encode())
+            break
     conn.close()
 
 def main():
