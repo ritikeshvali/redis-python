@@ -11,7 +11,7 @@ def resp_response(outp):
     return f"${len(outp)}\r\n{outp}\r\n"
 
 def handle_connection(conn, addr, store):
-    output_format = "%Y-%m-%d %H:%M:%S"
+    output_format = "%Y-%m-%d %H:%M:%S.%f"
     while True:
         request: bytes = conn.recv(1024)
         if not request:
@@ -32,7 +32,7 @@ def handle_connection(conn, addr, store):
             if len(vars) == 5:
                 delta = timedelta(milliseconds=int(vars[4]))
                 future_datetime = datetime.now() + delta
-                date_string = future_datetime.strftime(output_format)
+                date_string = future_datetime.strftime(output_format)[:-3]
                 store[vars[1]] = vars[2] + f"|time->{date_string}->" + vars[4]
             else:
             # no expiry time
