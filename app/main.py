@@ -46,7 +46,7 @@ def handle_connection(conn, addr, store):
             else:
                 milisecs = int(response.split("*px*")[1].split("->")[2])
                 time = datetime.strptime(response.split("*px*")[1].split("->")[1], output_format)
-                if (datetime.now() - time)*1000 > milisecs:
+                if int((datetime.now() - time).total_seconds()*1000) > milisecs:
                     response = "$-1\r\n"
                 else:
                     response = response.split("*px*")[0]
