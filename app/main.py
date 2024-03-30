@@ -9,7 +9,7 @@ def handle_connection(conn, addr):
     if matches:
         response = f"+PONG\r\n"
         print(response)
-        conn.send(response.encode())
+        conn.send(response)
     conn.close()
 
 def main():
