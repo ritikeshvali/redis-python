@@ -1,6 +1,6 @@
 import socket
 import threading
-import datetime
+from datetime import datetime
 
 def resp_parser(param):
     lines = param.split("\r\n")
