@@ -14,7 +14,14 @@ def handle_connection(conn, addr):
             print(response)
             conn.send(response.encode())
         elif "echo" in data.lower():
-            response = data.split(" ")[1]
+            elements = data.split("\r\n")
+            index = int(elements[0][1])-1
+            str_idx=4
+            response = ""
+            while index>0:
+                response += elements[str_idx]
+                str_idx+=2
+                index-=1
             print(response)
             conn.send(response.encode())
     conn.close()
