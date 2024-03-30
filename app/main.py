@@ -8,6 +8,7 @@ def handle_connection(conn, addr):
     matches = re.match(pattern, data)
     if matches:
         response = f"+PONG\r\n"
+        print(response)
         conn.send(response.encode())
     conn.close()
 
