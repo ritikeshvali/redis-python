@@ -50,6 +50,7 @@ def handle_connection(conn, addr, store):
                 milisecs = int(response.split("|")[1].split("->")[2])
                 time = datetime.strptime(response.split("|")[1].split("->")[1], output_format)
                 if time<now:
+                    print(f"barrier: {0}, now: {1}", time, now)
                     response = "$-1\r\n"
                 else:
                     response = resp_response(response.split("|")[0])
